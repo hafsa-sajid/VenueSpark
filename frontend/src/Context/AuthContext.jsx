@@ -4,7 +4,7 @@ export const authDataContext = createContext();
 
 function AuthContext({ children }) {
   // Port 8000 ko badal kar 8000 karein kyunki backend index.js mein yahi hai
-  const serverUrl = "http://localhost:8000"; 
+  const serverUrl = import.meta.env.VITE_SERVER_URL || "http://localhost:8000"; 
   
   let [loading, setLoading] = useState(false);
   const [token, setToken] = useState(null);

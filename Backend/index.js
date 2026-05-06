@@ -49,7 +49,7 @@ app.use((err, req, res, next) => {
   res.status(statusCode).json({ success: false, statusCode, message });
 });
 
-const port = 8000; 
+const port = process.env.PORT || 8000; 
 
 connectDb()
   .then(() => {
