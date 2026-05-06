@@ -1,8 +1,6 @@
 import { v2 as cloudinary } from 'cloudinary';
-import fs from 'fs';
 import dotenv from 'dotenv';
 
-// Config ko load karna zaroori hai
 dotenv.config();
 
 cloudinary.config({
@@ -11,30 +9,27 @@ cloudinary.config({
     api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
-const uploadOnCloudinary = async (localFilePath) => {
-    try {
-        if (!localFilePath) return null;
-
-        // File upload karein
-        const response = await cloudinary.uploader.upload(localFilePath, {
-            resource_type: "auto"
-        });
-
-        // Upload ke baad local file delete karein
-        if (fs.existsSync(localFilePath)) {
-            fs.unlinkSync(localFilePath);
+const uploadOnCloudinary = (fileBuffer) => {
+    return new Promise((resolve, reject) => {
+        if (!fileBuffer) {
+            resolve(null);
+            return;
         }
 
-        return response.secure_url; // Yeh URL controller mein jayega
+        const uploadStream = cloudinary.uploader.upload_stream(
+            { resource_type: "auto" },
+            (error, result) => {
+                if (error) {
+                    console.error("Cloudinary Upload Error:", error);
+                    resolve(null);
+                } else {
+                    resolve(result.secure_url);
+                }
+            }
+        );
 
-    } catch (error) {
-        // Error aaye toh bhi local file delete karein
-        if (fs.existsSync(localFilePath)) {
-            fs.unlinkSync(localFilePath);
-        }
-        console.log("Cloudinary Upload Error:", error);
-        return null;
-    }
-}
+        uploadStream.end(fileBuffer);
+    });
+};
 
 export default uploadOnCloudinary;

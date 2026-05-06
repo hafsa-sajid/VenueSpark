@@ -21,7 +21,7 @@ export const addListing = async (req, res) => {
       const fileKeys = Object.keys(req.files);
       for (const key of fileKeys) {
         if (req.files[key] && req.files[key][0]) {
-          const url = await uploadOnCloudinary(req.files[key][0].path);
+          const url = await uploadOnCloudinary(req.files[key][0].buffer);
           if (url) imageUrls.push(url);
         }
       }
@@ -99,7 +99,7 @@ export const updateListing = async (req, res) => {
       imageUrls = [];
       for (const key of Object.keys(req.files)) {
         if (req.files[key] && req.files[key][0]) {
-           const url = await uploadOnCloudinary(req.files[key][0].path);
+           const url = await uploadOnCloudinary(req.files[key][0].buffer);
            if (url) imageUrls.push(url);
         }
       }

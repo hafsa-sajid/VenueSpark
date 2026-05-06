@@ -23,7 +23,7 @@ export const createBooking = async (req, res) => {
 
         let paymentProofUrl = "";
         if (req.file) {
-            paymentProofUrl = await uploadOnCloudinary(req.file.path);
+            paymentProofUrl = await uploadOnCloudinary(req.file.buffer);
         }
 
         const newBooking = await Booking.create({
