@@ -12,10 +12,7 @@ import { fileURLToPath } from "url";
 import bookingRouter from "./routes/booking.route.js";
 import commentRouter from "./routes/comment.route.js";
 import complaintRouter from "./routes/complaint.route.js";
-import { app, server } from "./socket.js";
-if (process.env.NODE_ENV !== 'production') {
-  import('./config/cronJobs.js');
-}
+import { app } from "./socket.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -24,8 +21,9 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-// Static folder configuration
-app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); 
+// Static folder - handling case where it might not exist
+const uploadsPath = path.join(__dirname, 'uploads');
+app.use('/uploads', express.static(uploadsPath)); 
 
 app.use(cors({
   origin: process.env.CLIENT_URL || "http://localhost:5173",
@@ -53,20 +51,14 @@ app.use((err, req, res, next) => {
 
 const port = process.env.PORT || 8000; 
 
+// Database connection
+connectDb().catch(err => console.error("Initial DB connection error:", err));
+
+// Start server only if not on Vercel
 if (process.env.NODE_ENV !== 'production') {
-  connectDb()
-    .then(() => {
-      server.listen(port, () => {
-        console.log(`✅ Database Connected!`);
+    app.listen(port, () => {
         console.log(`🚀 Server started at: http://localhost:${port}`);
-      });
-    })
-    .catch((err) => {
-      console.error("❌ Database connection failed:", err.message);
-      process.exit(1);
     });
-} else {
-  connectDb();
 }
 
 export default app;
