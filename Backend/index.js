@@ -13,7 +13,9 @@ import bookingRouter from "./routes/booking.route.js";
 import commentRouter from "./routes/comment.route.js";
 import complaintRouter from "./routes/complaint.route.js";
 import { app, server } from "./socket.js";
-import './config/cronJobs.js';
+if (process.env.NODE_ENV !== 'production') {
+  import('./config/cronJobs.js');
+}
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
