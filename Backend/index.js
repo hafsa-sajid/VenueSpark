@@ -51,16 +51,20 @@ app.use((err, req, res, next) => {
 
 const port = process.env.PORT || 8000; 
 
-connectDb()
-  .then(() => {
-    server.listen(port, () => {
-      console.log(`✅ Database Connected!`);
-      console.log(`🚀 Server started at: http://localhost:${port}`);
+if (process.env.NODE_ENV !== 'production') {
+  connectDb()
+    .then(() => {
+      server.listen(port, () => {
+        console.log(`✅ Database Connected!`);
+        console.log(`🚀 Server started at: http://localhost:${port}`);
+      });
+    })
+    .catch((err) => {
+      console.error("❌ Database connection failed:", err.message);
+      process.exit(1);
     });
-  })
-  .catch((err) => {
-    console.error("❌ Database connection failed:", err.message);
-    process.exit(1);
-  });
+} else {
+  connectDb();
+}
 
 export default app;
