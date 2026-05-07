@@ -46,7 +46,7 @@ function MyListing() {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setHostBookings(res.data || []);
-        } catch (err) { console.log(err); }
+        } catch { console.log("Fetch Error"); }
     };
 
     const handleCancelByHost = async (bookingId) => {
@@ -71,7 +71,7 @@ function MyListing() {
                             fetchHostBookings();
                             if (getListing) getListing(); // Refresh home page listings
                             if (getCurrentUser) getCurrentUser(); // Refresh owner's properties data
-                        } catch (err) { 
+                        } catch { 
                             toast.error("Error Processing Request");
                             fetchHostBookings(); // Revert on fail
                         }
