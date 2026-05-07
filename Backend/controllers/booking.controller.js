@@ -275,9 +275,10 @@ export const getUserBookings = async (req, res) => {
         // Filter out Cancelled, Completed, and Outdated (past check-out date) bookings
         const bookings = await Booking.find({ 
             user: guestId, 
-            status: { $nin: ['Cancelled', 'Completed'] },
-            checkOut: { $gte: todayStr } // Only show current or future bookings
+            status: { $nin: ['Cancelled', 'Completed', 'Cancel_Requested'] }
+
         })
+
                  .populate('listing')
                  .populate('host', 'email')
                  .populate('user', 'name email');

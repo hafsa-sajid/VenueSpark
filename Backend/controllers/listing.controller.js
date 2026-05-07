@@ -52,8 +52,14 @@ export const addListing = async (req, res) => {
 // 2. Get All Listings
 export const getListing = async (req, res) => {
   try {
+    const todayStr = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Karachi' });
     const listings = await Listing.find().sort({ createdAt: -1 }).lean();
-    const allBookings = await Booking.find({ status: 'Booked' }).select('_id listing');
+    
+    // Only consider bookings that are active (status 'Booked' AND checkout date is >= today)
+    const allBookings = await Booking.find({ 
+      status: 'Booked',
+      checkOut: { $gte: todayStr }
+    }).select('_id listing');
 
     const updatedListings = listings.map(listing => {
       const foundBooking = allBookings.find(b => b.listing && b.listing.toString() === listing._id.toString());
@@ -62,6 +68,7 @@ export const getListing = async (req, res) => {
         bookingId: foundBooking ? foundBooking._id : null
       };
     });
+
 
 
     res.status(200).json(updatedListings);
