@@ -11,5 +11,12 @@
       "src": "/(.*)",
       "dest": "index.js"
     }
+  ],
+  "crons": [
+    {
+      "path": "/api/booking/cleanup-test",
+      "schedule": "0 0 * * *"
+    }
   ]
 }
+
