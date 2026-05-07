@@ -12,12 +12,16 @@ export const SocketContextProvider = ({ children }) => {
     const { userData } = useContext(userDataContext);
 
     useEffect(() => {
-        if (serverUrl && userData && userData._id) {
+        // Vercel doesn't support Socket.io, so we avoid connecting on production domains
+        const isVercel = window.location.hostname.includes("vercel.app");
+        
+        if (serverUrl && userData && userData._id && !isVercel) {
             const newSocket = io(serverUrl, {
                 query: {
                     userId: userData._id
                 }
             });
+
 
             setSocket(newSocket);
 

@@ -31,5 +31,5 @@ listingSchema.virtual('bookingDetails', {
   justOne: true
 });
 
-const Listing = mongoose.model("Listing", listingSchema);
-export default Listing;
+const Listing = mongoose.models.Listing || mongoose.model("Listing", listingSchema);
+export default Listing;

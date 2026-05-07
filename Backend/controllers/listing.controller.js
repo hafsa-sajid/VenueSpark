@@ -56,12 +56,13 @@ export const getListing = async (req, res) => {
     const allBookings = await Booking.find({ status: 'Booked' }).select('_id listing');
 
     const updatedListings = listings.map(listing => {
-      const foundBooking = allBookings.find(b => b.listing.toString() === listing._id.toString());
+      const foundBooking = allBookings.find(b => b.listing && b.listing.toString() === listing._id.toString());
       return {
         ...listing,
         bookingId: foundBooking ? foundBooking._id : null
       };
     });
+
 
     res.status(200).json(updatedListings);
   } catch (error) {
