@@ -7,6 +7,7 @@ import { sendEmail } from "../config/email.js";
 import PDFDocument from "pdfkit";
 import uploadOnCloudinary from "../config/cloudinary.js";
 
+
 dotenv.config();
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 

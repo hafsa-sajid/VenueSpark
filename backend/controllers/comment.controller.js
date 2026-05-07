@@ -130,9 +130,9 @@ export const getTaggableUsers = async (req, res) => {
 
         // Get all unique commenters on this listing
         const comments = await Comment.find({ listingId }).populate("author", "name email");
-        
+
         const usersMap = new Map();
-        
+
         // Add host/owner
         if (listing.host) {
             usersMap.set(listing.host._id.toString(), {

@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { FaArrowLeft, FaArrowRight, FaStar, FaShieldAlt, FaCamera, FaWallet } from "react-icons/fa";
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { listingDataContext } from '../Context/ListingContext';
 import { userDataContext } from '../Context/UserContext';
 import { RxCross1 } from "react-icons/rx";
@@ -14,7 +14,7 @@ import Nav from '../Component/Nav';
 function ViewCard() {
     let navigate = useNavigate()
     
-    let { cardDetails, setCardDetails, getListing, updating, setUpdating, deleting, setDeleting } = useContext(listingDataContext)
+    let { cardDetails, setCardDetails, getListing, updating, setUpdating, setDeleting } = useContext(listingDataContext)
     let { userData } = useContext(userDataContext)
     let { serverUrl } = useContext(authDataContext)
     
@@ -133,7 +133,7 @@ function ViewCard() {
 
             toast.success("Updated Successfully!");
             setUpdatePopUp(false);
-        } catch (error) {
+        } catch {
             toast.error("Update failed.");
         } finally { 
             setUpdating(false); 
@@ -157,7 +157,7 @@ function ViewCard() {
             });
             toast.success("Listing Deleted!");
             navigate("/")
-        } catch (error) {
+        } catch {
             toast.error("Failed to delete.");
         } finally {
             setDeleting(false);

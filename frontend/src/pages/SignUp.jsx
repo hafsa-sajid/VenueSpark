@@ -11,7 +11,8 @@ function SignUp() {
   let [show,setShow] = useState(false)
   let navigate = useNavigate()
   let {serverUrl} = useContext(authDataContext)
-  let {userData,setUserData} = useContext(userDataContext)
+  // No longer destructuring unused userData and setUserData
+  useContext(userDataContext)
   let [name,setName] = useState("")
   let [email,setEmail] = useState("")
   let [password,setPassword] = useState("")
