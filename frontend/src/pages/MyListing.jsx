@@ -24,17 +24,24 @@ function MyListing() {
                 if (getCurrentUser) {
                     await getCurrentUser();
                     await fetchHostBookings(); 
+                    setIsLoading(false); // 🔥 Show UI immediately
                     
-                    // Mark refund_request notifications as read for the owner
+                    // Mark refund_request notifications as read for the owner (in background)
                     const token = localStorage.getItem("token");
                     if (token) {
-                        await axios.put(`${serverUrl}/api/user/mark-read-notifications`, { type: 'refund_request' }, {
+                        axios.put(`${serverUrl}/api/user/mark-read-notifications`, { type: 'refund_request' }, {
                             headers: { Authorization: `Bearer ${token}` }
-                        });
-                        getCurrentUser(); // Refresh count after marking read
+                        }).then(() => {
+                            getCurrentUser(); // Refresh count after marking read
+                        }).catch(err => console.error(err));
                     }
+                } else {
+                    setIsLoading(false);
                 }
-            } catch (error) { console.error(error); } finally { setIsLoading(false); }
+            } catch (error) { 
+                console.error(error); 
+                setIsLoading(false);
+            }
         };
         loadData();
     }, []);

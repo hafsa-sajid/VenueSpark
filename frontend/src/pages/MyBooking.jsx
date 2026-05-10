@@ -30,17 +30,24 @@ function MyBooking() {
                 if (getCurrentUser) {
                     await getCurrentUser();
                     await fetchUserBookings();
+                    setIsLoading(false); // 🔥 Show UI immediately after getting bookings
                     
-                    // Mark cancellation_complete notifications as read for the user
+                    // Mark cancellation_complete notifications as read for the user (in background)
                     const token = localStorage.getItem("token");
                     if (token) {
-                        await axios.put(`${serverUrl}/api/user/mark-read-notifications`, { type: 'cancellation_complete' }, {
+                        axios.put(`${serverUrl}/api/user/mark-read-notifications`, { type: 'cancellation_complete' }, {
                             headers: { Authorization: `Bearer ${token}` }
-                        });
-                        getCurrentUser(); // Refresh count after marking read
+                        }).then(() => {
+                            getCurrentUser(); // Refresh count after marking read
+                        }).catch(err => console.error("Notification update error", err));
                     }
+                } else {
+                    setIsLoading(false);
                 }
-            } catch (error) { console.error(error); } finally { setIsLoading(false); }
+            } catch (error) { 
+                console.error(error); 
+                setIsLoading(false);
+            }
         };
         loadData();
     }, []); 
