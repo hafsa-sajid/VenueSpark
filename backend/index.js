@@ -32,6 +32,19 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept']
 }));
 
+// Database connection middleware to prevent timeouts on Vercel
+app.use(async (req, res, next) => {
+  try {
+    await connectDb();
+    next();
+  } catch (error) {
+    res.status(503).json({ 
+      success: false, 
+      message: "Database connection error. Please try again in a few seconds.",
+      error: error.message 
+    });
+  }
+});
 
 app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
@@ -52,8 +65,6 @@ app.use((err, req, res, next) => {
 
 const port = process.env.PORT || 8000; 
 
-// Database connection
-connectDb().catch(err => console.error("Initial DB connection error:", err));
 
 // Start server only if not on Vercel
 if (process.env.NODE_ENV !== 'production') {
