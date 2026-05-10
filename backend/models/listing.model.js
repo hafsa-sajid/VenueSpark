@@ -20,7 +20,8 @@ const listingSchema = new mongoose.Schema({
 }, { 
   timestamps: true,
   toJSON: { virtuals: true }, 
-  toObject: { virtuals: true } 
+  toObject: { virtuals: true },
+  bufferCommands: false
 });
 
 // Virtual field for bookings (Optional but good practice)

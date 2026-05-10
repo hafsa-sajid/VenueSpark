@@ -1,5 +1,11 @@
 import express from "express";
 import dotenv from "dotenv";
+import mongoose from "mongoose";
+
+// Set global mongoose options before anything else
+mongoose.set("bufferCommands", false);
+mongoose.set("bufferTimeoutMS", 5000); 
+
 dotenv.config();
 import connectDb from "./config/db.js";
 import cookieParser from "cookie-parser";

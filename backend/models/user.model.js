@@ -24,7 +24,7 @@ const userSchema = new mongoose.Schema({
 
   // Refunded Amount Wallet
   walletBalance: { type: Number, default: 0 }
-}, { timestamps: true });
+}, { timestamps: true, bufferCommands: false });
 
 // FIX: Check if model exists before creating
 const User = mongoose.models.User || mongoose.model("User", userSchema);

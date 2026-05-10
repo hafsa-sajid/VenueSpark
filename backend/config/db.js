@@ -19,7 +19,8 @@ const connectDb = async () => {
     }
 
     const options = {
-      serverSelectionTimeoutMS: 8000, // Timeout faster than Vercel's 10s limit
+      serverSelectionTimeoutMS: 5000,
+      connectTimeoutMS: 5000,
     };
 
     const conn = await mongoose.connect(url, options);
