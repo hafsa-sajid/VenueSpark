@@ -32,7 +32,11 @@ const uploadsPath = path.join(__dirname, 'uploads');
 app.use('/uploads', express.static(uploadsPath)); 
 
 app.use(cors({
-  origin: true,
+  origin: [
+    "https://venue-spark.vercel.app", 
+    "http://localhost:5173",
+    "http://localhost:3000"
+  ],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept']
