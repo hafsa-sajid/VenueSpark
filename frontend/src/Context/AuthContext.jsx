@@ -3,8 +3,8 @@ import React, { createContext, useState } from 'react';
 export const authDataContext = createContext();
 
 function AuthContext({ children }) {
-  // Use the actual deployed backend URL
-  const serverUrl = import.meta.env.VITE_SERVER_URL || "https://venue-spark-xamg.vercel.app"; 
+  // Hardcoding the backend URL to permanently override any incorrect Vercel settings
+  const serverUrl = "https://venue-spark-xamg.vercel.app"; 
   
   let [loading, setLoading] = useState(false);
   const [token, setToken] = useState(null);
