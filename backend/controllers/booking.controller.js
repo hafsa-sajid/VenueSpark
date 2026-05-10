@@ -22,6 +22,11 @@ export const createBooking = async (req, res) => {
         const listing = await Listing.findById(id);
         if (!listing) return res.status(404).json({ message: "Listing not found" });
 
+        // 🔥 Strict Double-Booking Prevention
+        if (listing.isBooked) {
+            return res.status(400).json({ message: "This property is already booked and unavailable." });
+        }
+
         let paymentProofUrl = "";
         if (req.file) {
             paymentProofUrl = await uploadOnCloudinary(req.file.buffer);
