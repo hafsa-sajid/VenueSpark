@@ -4,7 +4,10 @@ export const authDataContext = createContext();
 
 function AuthContext({ children }) {
   // Port 8000 ko badal kar 8000 karein kyunki backend index.js mein yahi hai
-  const serverUrl = import.meta.env.VITE_SERVER_URL || "http://localhost:8000"; 
+  // Automatically detect server URL: use current origin if on Vercel, else use env or localhost
+  const serverUrl = window.location.hostname.includes("vercel.app") 
+    ? window.location.origin 
+    : (import.meta.env.VITE_SERVER_URL || "http://localhost:8000"); 
   
   let [loading, setLoading] = useState(false);
   const [token, setToken] = useState(null);
