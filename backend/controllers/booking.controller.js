@@ -65,7 +65,10 @@ export const createBooking = async (req, res) => {
 export const getHostBookings = async (req, res) => {
     try {
         const hostId = req.userId;
-        const bookings = await Booking.find({ host: hostId })
+        const bookings = await Booking.find({ 
+            host: hostId,
+            status: { $nin: ['Cancelled', 'Completed'] }
+        })
             .populate('listing')
             .populate('user', 'email name')
             .sort({ createdAt: -1 }); 
